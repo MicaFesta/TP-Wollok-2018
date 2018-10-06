@@ -4,23 +4,34 @@ import hechiceria.*
 describe "Test" {
 
 	var rolando
+	var espadaDelDestino
+	var collarDivino
+	var mascaraOscura
+	var armadura
+	var espejo
 	
 	fixture{
-		rolando = new Personaje("Rolando", new EspectroMalefico("Hola"), [new ArmaCuerpoACuerpo()])
+		espadaDelDestino = new ArmaCuerpoACuerpo()
+		collarDivino = new CollarDivino(5)
+		mascaraOscura = new MascaraOscura(1)
+		armadura = new Armadura(1,0)
+		espejo = new Espejo()
+		rolando = new Personaje("Rolando", new Basico(), [ espadaDelDestino , collarDivino , mascaraOscura , armadura, espejo ])
 	}
 	
 	//Punto 3
 	
 	test "Saber si Rolando está cargado" {
-		assert.equals("")
+		assert.that(rolando.estaCargado())
 	}
 	
 	test "Hacer que Rolando se saque la armadura" {
-		assert.equals("")
+		rolando.quitarArtefacto(unArtefacto)
+		assert.that(rolando.estaCargado())
 	}
 	
 	test "Saber cuanta habilidad de lucha tiene Rolando" {
-		assert.equals("")
+		assert.equals(20, rolando.nivelDeLucha())
 	}
 	
 	test "Saber cual es la habilidad para la lucha de la armadura de Rolando si tiene una bendicion de refuerzo" {
@@ -40,7 +51,8 @@ describe "Test" {
 	}
 	
 	test "Eliminar todos los artefactos de Rolando" {
-		assert.equals("")
+		rolando.quitarTodosLosArtefactos()
+		assert.equals(1, rolando.nivelDeLucha())
 	}
 	
 	test "Reemplazar hechizo favorito por un libro de hechizos que contenga el Hechizo de Logos (con nombre “espectro malefico”) y al hechizo basico " {
