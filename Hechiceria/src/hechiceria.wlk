@@ -13,6 +13,10 @@ class Personaje {
 		artefactosDeLucha = unosArtefactosDeLucha
 	}
 	
+	method estaCargado(){
+		return artefactosDeLucha.size() > 5
+	}
+	
 	method agregarArtefacto(unArtefacto){
 		artefactosDeLucha.add(unArtefacto)
 	}
@@ -52,10 +56,6 @@ class Personaje {
 	method seCreePoderoso() {
 		return hechizoFavorito.esPoderoso()
 	}
-
-	method estaCargado() {
-		return (artefactosDeLucha.size() >= 5)
-	}
 	
 	method eclipse() {
 		fuerzaOscura = fuerzaOscura * 2
@@ -83,12 +83,7 @@ class EspectroMalefico {
 	
 	method poder() {
 		return nombre.size()
-	}
-
-	method nivelDeHechizeria(fuerzaOscura) {
-		return ( 3 * 17 ) + fuerzaOscura
-	}
-	
+	}	
 }
 
 class Logos {
@@ -99,17 +94,13 @@ class Logos {
 		nombre = unNombre
 		valorPorElCualLoMultiplico = unValor
 	}
-	
-	method poder() {
-		return nombre.size()
-	}
 
 	method esPoderoso() {
 		return nombre.size()>15
 	}
 
-	method nivelDeHechizeria(fuerzaOscura) {
-		return ( nombre.size() * valorPorElCualLoMultiplico ) + fuerzaOscura
+	method poder() {
+		return ( nombre.size() * valorPorElCualLoMultiplico )
 	}
 }
 
@@ -166,6 +157,20 @@ class MascaraOscura {
 	}
 }
 
+class Armadura {
+	var mejora
+	var valorBase
+	
+	constructor(unValorBase, unaMejora){
+		valorBase = unValorBase
+		mejora = unaMejora
+	}
+	
+	method poderDeLucha(nivelDeHechizeria) {
+		return valorBase + mejora.poderDeLucha(nivelDeHechizeria)
+	}
+}
+
 //Punto 3
 
 class CotaDeMalla {
@@ -175,28 +180,27 @@ class CotaDeMalla {
 		calidad = unaCalidad
 	}
 
-	method poderDeLucha(nivelDeHechizeria, poderDeHechizeria) {
+	method poderDeLucha(nivelDeHechizeria) {
 		return calidad
 	}
 }
 
 class Bendicion {
 
-	method poderDeLucha(nivelDeHechizeria, poderDeHechizeria) {
+	method poderDeLucha(nivelDeHechizeria) {
 		return nivelDeHechizeria
 	}
 }
 
 class Hechizo { //se toma poder de hechicería como el nivel del hechizo favorito, ya que la consiga no lo aclara
-	method poderDeLucha(nivelDeHechizeria, poderDeHechizeria) {
-		return poderDeHechizeria
+	method poderDeLucha(nivelDeHechizeria) {
+		return nivelDeHechizeria
 	}
 }
 
 class Ninguno {
-
-	method poderDeLucha(nivelDeHechizeria, poderDeHechizeria) {
-		return 2
+	method poderDeLucha(nivelDeHechizeria) {
+		return 0
 	}
 } 
 
@@ -205,3 +209,22 @@ object espejo {
 		return listaDeArtefactos.max({ listaDeArtefactos.map({artefacto => artefacto.poderDeLucha()})}) 
 	} 
 }
+
+class LibroDeHechizos {
+	var listaHechizos
+
+	constructor(hechizos){
+		listaHechizos = hechizos
+	}
+
+	method poder() {
+		return listaHechizos.sum({hechizo => hechizo.poder()})
+	}
+}
+
+
+
+//2) el espejo puede ser unico ya que no toma comportamiento adicional, en cambio pueden haber muchos libros
+//con distintos hechizos, por lo que debe ser una clase.
+
+//3) se provocaria un loop infinito.
