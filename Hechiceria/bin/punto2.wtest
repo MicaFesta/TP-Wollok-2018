@@ -1,0 +1,62 @@
+//TEST
+import hechiceria.*
+
+describe "Test" {
+
+	var rolando
+	var espadaDelDestino
+	var collarDivino
+	var mascaraOscura
+	var mascaraParaNadaOscura
+	
+	fixture{
+		mascaraParaNadaOscura = new MascaraOscura(0)
+		espadaDelDestino = new ArmaCuerpoACuerpo()
+		collarDivino = new CollarDivino(5)
+		mascaraOscura = new MascaraOscura(1)
+		rolando = new Personaje("Rolando", new Basico(), [ espadaDelDestino , collarDivino , mascaraOscura ])
+	}
+	
+	
+	//Punto 2
+	
+	test "Eliminar artefactos de Rolando" {
+		rolando.quitarTodosLosArtefactos()
+		assert.equals(1, rolando.nivelDeLucha())
+	}
+	
+	test "Conocer habilidad de lucha de Rolando con todos los artefactos" {
+		assert.equals(13, rolando.nivelDeLucha())
+	}
+	
+	test "Cambiar cantidad de perlas a collar divino a 3" {
+		collarDivino.cambiarCantidadDePerlas(3)
+		assert.equals(11, rolando.nivelDeLucha())
+	}
+	
+	test "Cambiar el valor base para lucha de Rolando a 8" {
+		rolando.modificarValorBaseDeLucha(8)
+		assert.equals(20, rolando.nivelDeLucha())
+	}
+	
+	test "Hacer que ocurra un eclipse" {
+		rolando.eclipse()
+		assert.equals(5, mascaraOscura.poderDeLucha(rolando.fuerzaOscura()))
+	}
+	
+	test "Eliminar mascara oscura de los artefactos" {
+		rolando.quitarArtefacto(mascaraOscura)
+		assert.equals(9, rolando.nivelDeLucha())
+	}
+	
+	test "Tener una mascara oscura con indice de oscuridad 0" {
+		assert.equals(4, mascaraParaNadaOscura.poderDeLucha(rolando.fuerzaOscura()))
+	}
+	
+	test "Tener una mascara oscura con indice de oscuridad 0 y valor minimo en 2" {
+		mascaraParaNadaOscura.cambiarMinimo(2)
+		assert.equals(2, mascaraParaNadaOscura.poderDeLucha(rolando.fuerzaOscura()))
+	}
+
+}
+

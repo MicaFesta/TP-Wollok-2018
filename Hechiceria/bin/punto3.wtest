@@ -1,0 +1,50 @@
+//TEST
+import hechiceria.*
+
+describe "Test" {
+
+	var rolando
+	
+	fixture{
+		rolando = new Personaje("Rolando", new EspectroMalefico("Hola"), [new ArmaCuerpoACuerpo()])
+	}
+	
+	//Punto 3
+	
+	test "Saber si Rolando está cargado" {
+		assert.equals("")
+	}
+	
+	test "Hacer que Rolando se saque la armadura" {
+		assert.equals("")
+	}
+	
+	test "Saber cuanta habilidad de lucha tiene Rolando" {
+		assert.equals("")
+	}
+	
+	test "Saber cual es la habilidad para la lucha de la armadura de Rolando si tiene una bendicion de refuerzo" {
+		assert.equals("")
+	}
+	
+	test "Saber cual es la habilidad para la lucha de Rolando si tiene una cota de malla de refuerzo" {
+		assert.equals("")
+	}
+	
+	test "Saber cual es la habilidad para la lucha de Rolando si tiene una hechizo basico de refuerzo" {
+		assert.equals("")
+	}
+	
+	test "Saber cual es la habilidad para la lucha de Rolando si tiene una hechizo espectro malefico de refuerzo" {
+		assert.equals("")
+	}
+	
+	test "Eliminar todos los artefactos de Rolando" {
+		assert.equals("")
+	}
+	
+	test "Reemplazar hechizo favorito por un libro de hechizos que contenga el Hechizo de Logos (con nombre “espectro malefico”) y al hechizo basico " {
+		assert.equals("")
+	}
+
+}
