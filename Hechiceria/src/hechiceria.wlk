@@ -1,13 +1,52 @@
+// Punto 1: Hechicería
+
 class Personaje {
 	var hechizoFavorito
 	var artefactosDeLucha = [ ]
 	var nombre
 	var dinero = 100
+	var valorBaseLucha = 1
 	
 	constructor(unNombre, unHechizoFavorito, unosArtefactosDeLucha){
 		nombre = unNombre
 		hechizoFavorito = unHechizoFavorito
 		artefactosDeLucha = unosArtefactosDeLucha
+	}
+
+	method agregarArtefacto(unArtefacto){
+		artefactosDeLucha.add(unArtefacto)
+	}
+	
+	method quitarArtefacto(unArtefacto){
+		artefactosDeLucha.remove(unArtefacto)
+	}
+	
+	method quitarTodosLosArtefactos(){
+		artefactosDeLucha.clear()
+	}
+	
+	method modificarValorBaseDeLucha(unValor){
+		valorBaseLucha = unValor
+	}
+	
+	method nivelDeLucha(){
+		return valorBaseLucha + self.aporteDeLosArtefactos()
+	}
+	
+	method poderDeLuchaVSNivelHechiceria(){
+		return self.nivelDeLucha() > self.nivelDeHechiceria()
+	}
+	
+	method aporteDeLosArtefactos(){
+		return artefactosDeLucha.sum({artefacto => artefacto.poderDeLucha()})
+	}
+	
+		method nivelDeHechiceria(){
+		return (3 * hechizoFavorito.poder()) + poderOscuro.fuerzaOscura()
+	}
+	
+	method cambiarHechizoFavorito(hechizoNuevo){
+		hechizoFavorito = hechizoNuevo
 	}
 
 	method seCreePoderoso() {
@@ -22,9 +61,10 @@ class Personaje {
 		if( dinero >= unEquipamiento.precio() ){
 			artefactosDeLucha.add(unEquipamiento)
 			dinero -= (unEquipamiento.precio() - (hechizoFavorito.precio()/2))
+			self.cambiarHechizoFavorito(unEquipamiento)
 			} else {
 				error.throwWithMessage("No te alcanza la biyuya")
-				//hacer tst y que el hechizo comprado sea el nuevo favorito
+				//hacer tst del error
 			}
 	  }
 	  
@@ -112,6 +152,10 @@ var cantidadPerlas
 		cantidadPerlas = unasPerlas
 	}
 	
+	method cambiarCantidadDePerlas(nuevaCantidad){
+		cantidadPerlas = nuevaCantidad
+	}
+	
 	method poderDeLucha() {
 		return cantidadPerlas
 	}
@@ -123,13 +167,18 @@ var cantidadPerlas
 
 class MascarasOscuras {
 	var indiceOscuridad
+	var minimo = 4
 
 	constructor(unIndiceDeOscuridad){
 		indiceOscuridad = unIndiceDeOscuridad
 	}
 
+	method cambiarMinimo(unMinimo){
+		minimo = unMinimo
+	}
+
 	method poderDeLucha() {
-		return 4.max((poderOscuro.fuerzaOscura() / 2 ) * indiceOscuridad)
+		return minimo.max((poderOscuro.fuerzaOscura() / 2 ) * indiceOscuridad)
 	}
 	
 	method precio(){
@@ -180,6 +229,8 @@ class CotaDeMalla {
 
 class Bendicion {
 
+
+//el metodo de lucha deberia ser polimorfico
 	method poderDeLucha(nivelDeHechizeria) {
 		return nivelDeHechizeria
 	}
@@ -225,6 +276,7 @@ object espejo {
 
 class LibroDeHechizos {
 	var listaHechizos
+	
  	constructor(hechizos){
 		listaHechizos = hechizos
 	}
