@@ -67,6 +67,10 @@ class Logos {
 	method nivelDeHechizeria(fuerzaOscura) {
 		return ( nombre.size() * valorPorElCualLoMultiplico ) + fuerzaOscura
 	}
+	
+	method precio(fuerzaOscura){
+		return self.nivelDeHechizeria(fuerzaOscura)
+	}
 }
 
 class Basico {
@@ -79,6 +83,10 @@ class Basico {
 	method poderDeHechizeria() {
 		return 10
 	}
+	
+	method precio(){
+		return 10
+	}
 }
 
 //Punto 2: Lucha 
@@ -88,6 +96,10 @@ class Espada {
 	method poderDeLucha() {
 		return 3
 	}
+	
+	method precio(){
+		return 15
+	}
 }
 
 class Hacha {
@@ -95,12 +107,20 @@ class Hacha {
 	method poderDeLucha() {
 		return 3
 	}
+	
+	method precio(){
+		return 15
+	}
 }
 
 class Lanza {
 
 	method poderDeLucha() {
 		return 3
+	}
+	
+	method precio(){
+		return 15
 	}
 }
 
@@ -114,6 +134,10 @@ var cantidadPerlas
 
 	method poderDeLucha() {
 		return cantidadPerlas
+	}
+	
+	method precio(){
+		return 2* cantidadPerlas
 	}
 }
 
@@ -141,6 +165,10 @@ class CotaDeMalla {
 	method poderDeLucha(nivelDeHechizeria, poderDeHechizeria) {
 		return calidad
 	}
+	
+	method precio(nivelDeHechizeria, poderDeHechizeria){
+		return self.poderDeLucha(nivelDeHechizeria, poderDeHechizeria)
+	}
 }
 
 class Bendicion {
@@ -161,10 +189,18 @@ class Ninguno {
 	method poderDeLucha(nivelDeHechizeria, poderDeHechizeria) {
 		return 2
 	}
+	
+	method precio(){
+		return 2
+	}
 } 
 
 object espejo { 
 	method poderDeLucha ( listaDeArtefactos ) { 
 		return listaDeArtefactos.max({ listaDeArtefactos.map({artefacto => artefacto.poderDeLucha()})}) 
 	} 
+	
+	method precio(){
+		return 90
+	}
 }
