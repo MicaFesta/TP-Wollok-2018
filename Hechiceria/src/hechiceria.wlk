@@ -30,7 +30,7 @@ class Personaje {
 	}
 	
 	method nivelDeLucha(){
-		return valorBaseLucha + self.aporteDeLosArtefactos()
+		return (valorBaseLucha + self.aporteDeLosArtefactos())
 	}
 	
 	method poderDeLuchaVSNivelHechiceria(){
@@ -71,6 +71,8 @@ class Personaje {
 	method cumplirObjetivo(){
 	  	dinero += 10
 	}
+	
+	method plus()
 }
 
 /* 
@@ -91,7 +93,26 @@ class EspectroMalefico {
 	
 } */
 
-class Logos {
+
+class Artefacto {
+var diasDesdequeComrpoElArtefacto
+var peso
+
+method peso(){
+		return peso -= self.factorDeCorrecion()
+	}
+
+method factorDeCorrecion(){
+		return self.factorComun() + self.extra()
+	}
+method factorComun() = 1.min(diasDesdequeComrpoElArtefacto / 1000)
+
+method extra()
+}
+
+
+
+class Logos inherits Artefacto{
 	var nombre
 	var valorPorElCualLoMultiplico
 
@@ -116,9 +137,12 @@ class Logos {
 		return self.nivelDeHechizeria()
 	}
 	
+		override method extra() = 0
+		
+	
 }
 
-class HechizoBasico {
+class HechizoBasico inherits Artefacto{
 
 	method esPoderoso() {
 		return false
@@ -131,13 +155,13 @@ class HechizoBasico {
 	method precio(){
 		return 10
 	}
+	
+	override method extra() = 0
 }
 
 //Punto 2: Lucha 
-
-class ArmaCuerpoACuerpo {
-var diasDesdequeComrpoElArtefacto
-var peso
+	
+class ArmaCuerpoACuerpo inherits Artefacto{
 	
  	method poderDeLucha() {
 		return 3
@@ -147,23 +171,13 @@ var peso
 		return 3 * self.poderDeLucha()
 	}
 	
-	method peso(){
-		if (diasDesdequeComrpoElArtefacto>2500){
-			return peso -= 1
-		}else{
-			return peso -= self.factorDeCorrecion()
-		}
-	}
+	override method extra() = 0
 	
-	method factorDeCorrecion(){
-		return diasDesdequeComrpoElArtefacto / 1000 
-	}
+
 }
 
-class CollarDivino {
+class CollarDivino inherits Artefacto{
 var cantidadPerlas
-var diasDesdequeComrpoElArtefacto
-var peso
 
 	constructor(unasPerlas){
 		cantidadPerlas = unasPerlas
@@ -181,24 +195,13 @@ var peso
 		return 2* cantidadPerlas
 	}
 	
-	method peso(){
-		if (diasDesdequeComrpoElArtefacto>2500){
-			return peso -= 1 + (0.5 * cantidadPerlas)
-		}else{
-			return peso -= self.factorDeCorrecion() + (0.5 * cantidadPerlas)
-		}
-	}
+	override method extra() = 0.5 * cantidadPerlas
 	
-	method factorDeCorrecion(){
-		return diasDesdequeComrpoElArtefacto / 1000 
-	}
 }
 
-class MascarasOscuras {
+class MascarasOscuras inherits Artefacto{
 var indiceOscuridad
 var minimo = 4
-var diasDesdequeComrpoElArtefacto
-var peso
 
 	constructor(unIndiceDeOscuridad){
 		indiceOscuridad = unIndiceDeOscuridad
@@ -216,28 +219,12 @@ var peso
 		return 0
 	}
 	
-	method peso(){
-		if (diasDesdequeComrpoElArtefacto>2500){
-			return peso -= 1 
-		}else{
-			if(self.poderDeLucha()>3){
-				return peso -= self.factorDeCorrecion() + (self.poderDeLucha()-3)
-			} else {
-				return peso -= self.factorDeCorrecion()
-			}
-		}
-	}
-	
-	method factorDeCorrecion(){
-		return diasDesdequeComrpoElArtefacto / 1000 
-	}
+	override method extra() = self.poderDeLucha() - 3
 }
 
-class Armadura {
+class Armadura inherits Artefacto{
 var mejora
 var valorBase
-var diasDesdequeComrpoElArtefacto
-var peso
 
 	constructor(unValorBase, unaMejora){
 		valorBase = unValorBase
@@ -256,18 +243,7 @@ var peso
 		return valorBase
 	}
 
-
-	method peso(){
-		if (diasDesdequeComrpoElArtefacto>2500){
-			return peso -= 1 
-		}else{
-			return peso -= mejora.poderDeLucha()
-		}
-	}
-	
-	method factorDeCorrecion() {
-		return diasDesdequeComrpoElArtefacto / 1000 
-	}
+	override method extra() = mejora.poderDeLucha()
 
 }
 
@@ -314,9 +290,6 @@ class Hechizo { //se toma poder de hechicería como el nivel del hechizo favorit
 		return armadura.valorBase() + 3
 	}
 	
-		method peso(){
-		return 0
-	}	
 	
 }
 
@@ -331,9 +304,7 @@ class Ninguno {
 	}
 } 
 
-object espejo { 
-var diasDesdequeComrpoElArtefacto
-var peso
+object espejo inherits Artefacto{ 
 
 	method poderDeLucha ( listaDeArtefactos ) { 
 		return listaDeArtefactos.max({ listaDeArtefactos.map({artefacto => artefacto.poderDeLucha()})}) 
@@ -343,20 +314,10 @@ var peso
 		return 90
 	}
 	
-	method peso(){
-		if (diasDesdequeComrpoElArtefacto>2500){
-			return peso -= 1
-		}else{
-			return peso -= self.factorDeCorrecion()
-		}
-	}
-	
-	method factorDeCorrecion(){
-		return diasDesdequeComrpoElArtefacto / 1000 
-	}
+	override method extra() = 0
 }
 
-class LibroDeHechizos {
+class LibroDeHechizos inherits Artefacto{
 	var listaHechizos
 	
  	constructor(hechizos){
@@ -370,10 +331,8 @@ class LibroDeHechizos {
 	method precio(){
 		return (listaHechizos.size() * 10) + self.poder()
 	}
-	
-	method peso(){
-		return 0
-	}
+
+	override method extra() = 0
 }
 
 object poderOscuro{
@@ -419,11 +378,51 @@ object poderOscuro{
 
 //Punto 3
 
-class NPC{
-	var nombre
-	var habilidadDeLucha
+class NPC inherits Personaje{
+var nivel 
+override method nivelDeLucha() = super() * nivel.multiplicador()
 }
+
+class Dificultad{
+ var property multiplicador
  
+ constructor (_multiplicador){
+ 	multiplicador=_multiplicador
+ }
+	
+}	
  
+
 //Punto 4
 
+class Comerciante{
+var situacionImpositiva
+
+	method comerciar(item){
+		return item.precio() + (situacionImpositiva.impuesto() * item.precio())
+	}
+
+}
+
+object independiente{
+	method impuesto(item){
+		return 1		
+	}
+}
+
+object registrado{
+	method impuesto(item){
+		return 0.2		
+	}
+}
+
+object impuestoALasGanancias{
+var minimoNoDisponible
+		method impuesto(item){
+			if(item.precio()>minimoNoDisponible){
+				return 1
+			}else{
+				return 0.35	
+			}		
+	}
+}
