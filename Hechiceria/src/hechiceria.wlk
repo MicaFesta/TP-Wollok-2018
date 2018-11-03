@@ -2,7 +2,7 @@
 
 class Personaje {
 	var hechizoFavorito
-	var artefactosDeLucha = [ ]
+	var artefactosDeLucha = []
 	var nombre
 	var dinero = 100
 	var valorBaseLucha = 1
@@ -41,7 +41,7 @@ class Personaje {
 		return artefactosDeLucha.sum({artefacto => artefacto.poderDeLucha()})
 	}
 	
-		method nivelDeHechiceria(){
+	method nivelDeHechiceria(){
 		return (3 * hechizoFavorito.poder()) + poderOscuro.fuerzaOscura()
 	}
 	
@@ -66,11 +66,11 @@ class Personaje {
 				error.throwWithMessage("No te alcanza la biyuya")
 				//hacer tst del error
 			}
-	  }
+	}
 	  
-	  method cumplirObjetivo(){
+	method cumplirObjetivo(){
 	  	dinero += 10
-	  }
+	}
 }
 
 /* 
@@ -115,6 +115,7 @@ class Logos {
 	method precio(){
 		return self.nivelDeHechizeria()
 	}
+	
 }
 
 class HechizoBasico {
@@ -135,6 +136,8 @@ class HechizoBasico {
 //Punto 2: Lucha 
 
 class ArmaCuerpoACuerpo {
+var diasDesdequeComrpoElArtefacto
+var peso
 	
  	method poderDeLucha() {
 		return 3
@@ -143,10 +146,24 @@ class ArmaCuerpoACuerpo {
 	method precio(){
 		return 3 * self.poderDeLucha()
 	}
+	
+	method peso(){
+		if (diasDesdequeComrpoElArtefacto>2500){
+			return peso -= 1
+		}else{
+			return peso -= self.factorDeCorrecion()
+		}
+	}
+	
+	method factorDeCorrecion(){
+		return diasDesdequeComrpoElArtefacto / 1000 
+	}
 }
 
 class CollarDivino {
 var cantidadPerlas
+var diasDesdequeComrpoElArtefacto
+var peso
 
 	constructor(unasPerlas){
 		cantidadPerlas = unasPerlas
@@ -163,11 +180,25 @@ var cantidadPerlas
 	method precio(){
 		return 2* cantidadPerlas
 	}
+	
+	method peso(){
+		if (diasDesdequeComrpoElArtefacto>2500){
+			return peso -= 1 + (0.5 * cantidadPerlas)
+		}else{
+			return peso -= self.factorDeCorrecion() + (0.5 * cantidadPerlas)
+		}
+	}
+	
+	method factorDeCorrecion(){
+		return diasDesdequeComrpoElArtefacto / 1000 
+	}
 }
 
 class MascarasOscuras {
-	var indiceOscuridad
-	var minimo = 4
+var indiceOscuridad
+var minimo = 4
+var diasDesdequeComrpoElArtefacto
+var peso
 
 	constructor(unIndiceDeOscuridad){
 		indiceOscuridad = unIndiceDeOscuridad
@@ -184,12 +215,30 @@ class MascarasOscuras {
 	method precio(){
 		return 0
 	}
+	
+	method peso(){
+		if (diasDesdequeComrpoElArtefacto>2500){
+			return peso -= 1 
+		}else{
+			if(self.poderDeLucha()>3){
+				return peso -= self.factorDeCorrecion() + (self.poderDeLucha()-3)
+			} else {
+				return peso -= self.factorDeCorrecion()
+			}
+		}
+	}
+	
+	method factorDeCorrecion(){
+		return diasDesdequeComrpoElArtefacto / 1000 
+	}
 }
 
 class Armadura {
-	var mejora
-	var valorBase
-	
+var mejora
+var valorBase
+var diasDesdequeComrpoElArtefacto
+var peso
+
 	constructor(unValorBase, unaMejora){
 		valorBase = unValorBase
 		mejora = unaMejora
@@ -206,6 +255,20 @@ class Armadura {
 	method valorBase(){
 		return valorBase
 	}
+
+
+	method peso(){
+		if (diasDesdequeComrpoElArtefacto>2500){
+			return peso -= 1 
+		}else{
+			return peso -= mejora.poderDeLucha()
+		}
+	}
+	
+	method factorDeCorrecion() {
+		return diasDesdequeComrpoElArtefacto / 1000 
+	}
+
 }
 
 //Punto 3
@@ -249,6 +312,10 @@ class Hechizo { //se toma poder de hechicería como el nivel del hechizo favorit
 	
 	method precio(armadura){
 		return armadura.valorBase() + 3
+	}
+	
+		method peso(){
+		return 0
 	}	
 	
 }
@@ -265,12 +332,27 @@ class Ninguno {
 } 
 
 object espejo { 
+var diasDesdequeComrpoElArtefacto
+var peso
+
 	method poderDeLucha ( listaDeArtefactos ) { 
 		return listaDeArtefactos.max({ listaDeArtefactos.map({artefacto => artefacto.poderDeLucha()})}) 
 	} 
 	
 	method precio(){
 		return 90
+	}
+	
+	method peso(){
+		if (diasDesdequeComrpoElArtefacto>2500){
+			return peso -= 1
+		}else{
+			return peso -= self.factorDeCorrecion()
+		}
+	}
+	
+	method factorDeCorrecion(){
+		return diasDesdequeComrpoElArtefacto / 1000 
 	}
 }
 
@@ -287,6 +369,10 @@ class LibroDeHechizos {
 	
 	method precio(){
 		return (listaHechizos.size() * 10) + self.poder()
+	}
+	
+	method peso(){
+		return 0
 	}
 }
 
@@ -305,3 +391,39 @@ object poderOscuro{
  //2) el espejo puede ser unico ya que no toma comportamiento adicional, en cambio pueden haber muchos libros
 //con distintos hechizos, por lo que debe ser una clase.
  //3) se provocaria un loop infinito.
+ 
+ //Entrega 3
+ 
+ //Punto 1 
+ 
+ class HechizoComercial {
+	var nombre
+	var valorPorElCualLoMultiplico
+	var porcentaje
+
+	constructor(unNombre, unValor){
+		nombre = unNombre
+		valorPorElCualLoMultiplico = unValor
+	}
+
+	method esPoderoso() {
+		return self.nivelDeHechizeria() > 15
+	}
+
+	method nivelDeHechizeria() {
+		return ((nombre.size() * porcentaje )*valorPorElCualLoMultiplico)
+	}
+	
+}
+
+
+//Punto 3
+
+class NPC{
+	var nombre
+	var habilidadDeLucha
+}
+ 
+ 
+//Punto 4
+
